@@ -1,6 +1,7 @@
 package com.damdebotush.ppmtool.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
@@ -10,10 +11,13 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String projectName;
 
+    @NotBlank
     private String projectIdentifier;
 
+    @NotBlank
     private String description;
 
     private Date startDate;
