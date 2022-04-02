@@ -1,6 +1,7 @@
 package com.damdebotush.ppmtool.web;
 
 import com.damdebotush.ppmtool.domain.Project;
+import com.damdebotush.ppmtool.service.MapValidationErrorService;
 import com.damdebotush.ppmtool.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,14 +19,17 @@ import javax.validation.Valid;
 public class ProjectController {
 
     @Autowired
-    ProjectService projectService;
+    private ProjectService projectService;
+
+    @Autowired
+    private MapValidationErrorService mapValidationErrorService;
 
     @PostMapping(value = "")
     public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult result) {
 
-        if (result.hasErrors()) {
-            return new ResponseEntity<>("Invalid Project", HttpStatus.BAD_REQUEST);
-        }
+        ResponseEntity<?> errorMap = mapValidationErrorService.getMapValidationError(result);
+        if (errorMap != null)
+            return errorMap;
 
         project = projectService.saveOrUpdateProject(project);
         return new ResponseEntity<>(project, HttpStatus.CREATED);
