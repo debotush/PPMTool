@@ -4,13 +4,8 @@ import com.damdebotush.ppmtool.domain.Project;
 import com.damdebotush.ppmtool.exceptions.ProjectIdException;
 import com.damdebotush.ppmtool.repository.ProjectRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 @Service
@@ -40,9 +35,19 @@ public class ProjectService {
     }
 
     public Iterable<Project> getAllProjects() {
-        Iterable<Project> projectList = projectRepo.findAll();
 
-        return projectList;
+        return projectRepo.findAll();
+
+    }
+
+    public void deleteProject(String projectId) {
+        Project project = projectRepo.findByProjectIdentifier(projectId);
+
+        if (Objects.isNull(project)) {
+            throw new ProjectIdException("There are no Project exist with this ID '"+projectId+"'.");
+        }
+
+        projectRepo.delete(project);
     }
 
 }

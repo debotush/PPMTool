@@ -10,7 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/project")
@@ -44,8 +43,14 @@ public class ProjectController {
     @GetMapping("/all")
     public Iterable<?> getAllProects() {
 
-        Iterable<Project> projectList = projectService.getAllProjects();
+        return projectService.getAllProjects();
+    }
 
-        return projectList;
+    @DeleteMapping("/{projectId}")
+    public ResponseEntity<?> deleteProjectByProjectIdentifier(@PathVariable String projectId) {
+
+        projectService.deleteProject(projectId);
+
+        return new ResponseEntity<>("Project has been deleted.", HttpStatus.OK);
     }
 }
